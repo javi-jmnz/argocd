@@ -7,10 +7,14 @@ spec:
   project: default
   source:
     repoURL: https://github.com/javi-jmnz/argocd
-    path: .
+    path: k8s # 👈 OJO: aquí usa tu nueva carpeta
     targetRevision: HEAD
   destination:
     server: https://kubernetes.default.svc
     namespace: default
   syncPolicy:
-    automated: {} # auto sync on commit
+    automated:
+      prune: true # borra recursos que ya no existen en Git
+      selfHeal: true # repara drift del cluster
+    syncOptions:
+      - CreateNamespace=true

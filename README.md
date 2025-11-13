@@ -109,9 +109,40 @@ To see the aplication running in argo local run:
 argocd app list
 ```
 
+To force ArgoCD local if the aplycation does not sync using the UI try in argo local run:
+
+```bash
+argocd app sync argocd/javi-nginx-app --force
+```
+
+````bash
+TIMESTAMP  GROUP        KIND   NAMESPACE                  NAME    STATUS   HEALTH        HOOK  MESSAGE
+
+Name:               argocd/javi-nginx-app
+Project:            default
+Server:             https://kubernetes.default.svc
+Namespace:          default
+URL:                https://localhost:8081/applications/argocd/javi-nginx-app
+Source:
+- Repo:             https://github.com/javi-jmnz/argocd
+  Target:           HEAD
+  Path:             .
+SyncWindow:         Sync Allowed
+Sync Policy:        Automated
+Sync Status:        Synced to HEAD (d65b453)
+Health Status:      Healthy
+
+Operation:          Sync
+Sync Revision:      d65b4531fd90fc54e51e3c6120cedd7694bd3051
+Phase:              Succeeded
+Start:              2025-11-13 15:00:26 -0700 MST
+Finished:           2025-11-13 15:00:26 -0700 MST
+Duration:           0s
+Message:            successfully synced (no more tasks)```
+
 Reply:
 
 ```bash
 NAME                   CLUSTER                         NAMESPACE  PROJECT  STATUS     HEALTH    SYNCPOLICY  CONDITIONS  REPO                                 PATH  TARGET
 argocd/javi-nginx-app  https://kubernetes.default.svc  default    default  OutOfSync  Degraded  Auto        <none>      https://github.com/javi-jmnz/argocd  .     HEAD
-```
+````
