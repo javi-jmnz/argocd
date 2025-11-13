@@ -13,6 +13,8 @@ spec:
       labels:
         app: javi-nginx
     spec:
+      imagePullSecrets:
+        - name: ghcr-secret
       containers:
         - name: nginx
           image: ghcr.io/javi-jmnz/argocd:latest
