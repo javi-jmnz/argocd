@@ -39,7 +39,7 @@ jobs:
           rm -rf gitops
           
           # Clone repository using HTTPS URL without token
-          git clone https://github.com/Javi-Jmnz/argocd.git gitops
+          git clone https://github.com/javi-jmnz/argocd.git gitops
           cd gitops
           
           if [[ "$OSTYPE" == "darwin"* ]]; then
@@ -55,4 +55,4 @@ jobs:
           git commit -m "Update image to ${{ github.sha }}"
           
           # Push
-          git push -f https://${GIT_TOKEN}@github.com/Javi-Jmnz/argocd.git main
+          git push -f https://${GIT_TOKEN}@github.com/javi-jmnz/argocd.git main
