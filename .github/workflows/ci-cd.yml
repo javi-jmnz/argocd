@@ -26,28 +26,33 @@ jobs:
           tags: |
             ghcr.io/${{ github.repository }}:latest
             ghcr.io/${{ github.repository }}:${{ github.sha }}
-            - name: Update GitOps repository
-            shell: bash
-            env:
-              GIT_TOKEN: ${{ secrets.GITOPS_PAT }}
-            run: |
-              git config --global credential.helper store
-              echo "https://${GIT_TOKEN}:x-oauth-basic@github.com" > ~/.git-credentials
-              
-              rm -rf gitops
-              git clone https://github.com/javi-jmnz/argocd.git gitops
-              cd gitops
-              
-              # Reemplaza la imagen, sin importar la actual
-              sed -i "s|image: .*|image: ghcr.io/${{ github.repository }}:${{ github.sha }}|g" deployment.yaml
-              
-              git config --global user.name "GitHub Actions"
-              git config --global user.email "actions@github.com"
-              git add deployment.yaml
+      - name: Update GitOps repository
+        shell: bash
+        env:
+          GIT_TOKEN: ${{ secrets.GITOPS_PAT }}
+        run: |
+          # Configure git credential store
+          git config --global credential.helper store
+          echo "https://${GIT_TOKEN}:x-oauth-basic@github.com" > ~/.git-credentials
           
-              if git diff --cached --quiet; then
-                echo "No changes to commit."
-              else
-                git commit -m "Update image to ${{ github.sha }}"
-                git push -f https://${GIT_TOKEN}@github.com/javi-jmnz/argocd.git main
-              fi
+          # Remove any existing gitops directory
+          rm -rf gitops
+          
+          # Clone repository using HTTPS URL without token
+          git clone https://github.com/javi-jmnz/argocd.git gitops
+          cd gitops
+          
+          if [[ "$OSTYPE" == "darwin"* ]]; then
+            sed -i '' "s|image: ghcr.io/${{ github.repository }}:.*|image: ghcr.io/${{ github.repository }}:${{ github.sha }}|g" deployment.yaml
+          else
+            sed -i "s|image: ghcr.io/${{ github.repository }}:.*|image: ghcr.io/${{ github.repository }}:${{ github.sha }}|g" deployment.yaml
+          fi
+          
+          # Commit changes
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+          git add deployment.yaml
+          git commit -m "Update image to ${{ github.sha }}"
+          
+          # Push
+          git push -f https://${GIT_TOKEN}@github.com/javi-jmnz/argocd.git main
