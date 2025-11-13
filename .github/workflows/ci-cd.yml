@@ -45,7 +45,7 @@ jobs:
           if [[ "$OSTYPE" == "darwin"* ]]; then
             sed -i '' "s|image: ghcr.io/${{ github.repository }}:.*|image: ghcr.io/${{ github.repository }}:${{ github.sha }}|g" deployment.yaml
           else
-            sed -i "s|image: ghcr.io/${{ github.repository }}:.*|image: ghcr.io/${{ github.repository }}:${{ github.sha }}|g" deployment.yaml
+            sed -i "s|\(image:\s*ghcr.io/${{ github.repository }}:\).*|\1${{ github.sha }}|g" deployment.yaml
           fi
           
           # Commit changes
