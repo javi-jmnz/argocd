@@ -109,7 +109,7 @@ To see the aplication running in argo local run:
 argocd app list
 ```
 
-To force ArgoCD local if the aplycation does not sync using the UI try in argo local run:
+To force ArgoCD local when the aplycation does not sync using the UI try in argo local run:
 
 ```bash
 argocd app sync argocd/javi-nginx-app --force
